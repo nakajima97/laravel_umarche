@@ -417,7 +417,7 @@
                         in</a>
 
                     @if (Route::has('owner.register'))
-                        <a href="{{ route('register') }}"
+                        <a href="{{ route('owner.register') }}"
                             class="ml-4 text-sm text-gray-700 dark:text-gray-500 underline">Register</a>
                     @endif
                 @endauth

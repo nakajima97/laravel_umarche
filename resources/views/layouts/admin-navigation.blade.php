@@ -17,7 +17,7 @@
                     <x-nav-link :href="route('admin.dashboard')" :active="request()->routeIs('dashboard')">
                         {{ __('Dashboard') }}
                     </x-nav-link>
-                    <x-nav-link :href="route('admin.owner.index')" :active="request()->routeIs('admin.owner.dashboard')">
+                    <x-nav-link :href="route('admin.owners.index')" :active="request()->routeIs('admin.owner.dashboard')">
                         オーナー管理
                     </x-nav-link>
                 </div>
