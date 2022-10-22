@@ -8,7 +8,6 @@ use App\Models\Owner;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
 
-
 class OwnersController extends Controller
 {
     public function __construct()
@@ -57,7 +56,7 @@ class OwnersController extends Controller
             'password' => Hash::make($request->password),
         ]);
 
-        return redirect()->route('admin.owners.index');
+        return redirect()->route('admin.owners.index')->with('message', 'オーナー登録を実施しました。');
     }
 
     /**
