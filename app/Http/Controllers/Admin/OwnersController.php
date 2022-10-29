@@ -6,7 +6,9 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Owner;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\Rules;
+use Throwable;
 
 class OwnersController extends Controller
 {
@@ -49,6 +51,12 @@ class OwnersController extends Controller
             'email' => ['required', 'string', 'email', 'max:255', 'unique:owners'],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
+
+        try {
+        } catch (Throwable $e) {
+            Log::error($e);
+            throw $e;
+        }
 
         Owner::create([
             'name' => $request->name,
