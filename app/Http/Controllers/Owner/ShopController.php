@@ -3,13 +3,10 @@
 namespace App\Http\Controllers\Owner;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Shop;
-use Illuminate\Support\Facades\Storage;
-use InterventionImage;
-use League\CommonMark\Extension\CommonMark\Node\Inline\Strong;
 use App\Http\Requests\UploadImageRequest;
+use App\Services\ImageService;
 
 class ShopController extends Controller
 {
@@ -52,13 +49,7 @@ class ShopController extends Controller
             // リサイズなし
             // Storage::putFile('public/shops', $imageFIle);
 
-            $fileName = uniqid(rand() . '_');
-            $extension = $imageFIle->extension();
-            $fileNameToStore = $fileName . '.' . $extension;
-
-            $resizedImage = INterventionImage::make($imageFIle)->resize(1920, 1080)->encode();
-
-            Storage::put('public/shops/' . $fileNameToStore, $resizedImage);
+            ImageService::upload($imageFIle, 'shops');
         }
 
         return redirect()->route('owner.shops.index');
