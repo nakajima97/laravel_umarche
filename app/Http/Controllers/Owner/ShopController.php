@@ -9,6 +9,7 @@ use App\Models\Shop;
 use Illuminate\Support\Facades\Storage;
 use InterventionImage;
 use League\CommonMark\Extension\CommonMark\Node\Inline\Strong;
+use App\Http\Requests\UploadImageRequest;
 
 class ShopController extends Controller
 {
@@ -44,7 +45,7 @@ class ShopController extends Controller
         return view('owner.shops.edit', compact('shop'));
     }
 
-    public function update(Request $request)
+    public function update(UploadImageRequest $request)
     {
         $imageFIle = $request->image;
         if (!is_null($imageFIle) && $imageFIle->isValid()) {
