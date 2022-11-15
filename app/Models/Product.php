@@ -13,4 +13,14 @@ class Product extends Model
     {
         return $this->belongsTo(Shop::class);
     }
+
+    public function category()
+    {
+        return $this->belongsTo(SecondaryCategory::class, 'secondary_category_id');
+    }
+
+    public function imageFirst()
+    {
+        return $this->belongsTo(Image::class, 'image1', 'id');
+    }
 }
