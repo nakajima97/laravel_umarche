@@ -14,7 +14,65 @@
                         <div class="-m-2">
                             <div class="p-2 w-1/2 mx-auto">
                                 <div class="relative">
-                                    <select name="category" id="">
+                                    <label for="name" class="leading-7 text-sm text-gray-600">商品名 ※必須</label>
+                                    <input type="text" id="name" required value="{{ old('name') }}"
+                                        name="name"
+                                        class="w-full bg-gray-100 bg-opacity-50 rounded border border-gray-300 focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out">
+                                    <x-input-error :messages="$errors->get('name')" class="mt-2" />
+                                </div>
+                            </div>
+                            <div class="p-2 w-1/2 mx-auto">
+                                <div class="relative">
+                                    <label for="information" class="leading-7 text-sm text-gray-600">商品情報　※必須</label>
+                                    <textarea type="text" id="information" required name="information" rows="10"
+                                        class="w-full bg-gray-100 bg-opacity-50 rounded border border-gray-300 focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out">{{ old('information') }}</textarea>
+                                    <x-input-error :messages="$errors->get('name')" class="mt-2" />
+                                </div>
+                            </div>
+                            <div class="p-2 w-1/2 mx-auto">
+                                <div class="relative">
+                                    <label for="price" class="leading-7 text-sm text-gray-600">価格 ※必須</label>
+                                    <input type="number" id="price" required value="{{ old('price') }}"
+                                        name="price"
+                                        class="w-full bg-gray-100 bg-opacity-50 rounded border border-gray-300 focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out">
+                                    <x-input-error :messages="$errors->get('price')" class="mt-2" />
+                                </div>
+                            </div>
+                            <div class="p-2 w-1/2 mx-auto">
+                                <div class="relative">
+                                    <label for="sort_order" class="leading-7 text-sm text-gray-600">表示順</label>
+                                    <input type="number" id="sort_order" value="{{ old('sort_order') }}"
+                                        name="sort_order"
+                                        class="w-full bg-gray-100 bg-opacity-50 rounded border border-gray-300 focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out">
+                                    <x-input-error :messages="$errors->get('sort_order')" class="mt-2" />
+                                </div>
+                            </div>
+                            <div class="p-2 w-1/2 mx-auto">
+                                <div class="relative">
+                                    <label for="quantity" class="leading-7 text-sm text-gray-600">初期在庫 ※必須</label>
+                                    <input type="number" id="quantity" value="{{ old('quantity') }}" required
+                                        name="quantity"
+                                        class="w-full bg-gray-100 bg-opacity-50 rounded border border-gray-300 focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out">
+                                    <x-input-error :messages="$errors->get('sort_order')" class="mt-2" />
+                                </div>
+                            </div>
+                            <div class="p-2 w-1/2 mx-auto">
+                                <div class="relative">
+                                    <label for="shop_id" class="leading-7 text-sm text-gray-600">販売する店舗</label>
+                                    <select name="shop_id" id="shop_id"
+                                        class="w-full bg-gray-100 bg-opacity-50 rounded border border-gray-300 focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out">
+                                        @foreach ($shops as $shop)
+                                            <option value="{{ $shop->id }}">
+                                                {{ $shop->name }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="p-2 w-1/2 mx-auto">
+                                <div class="relative">
+                                    <label for="category" class="leading-7 text-sm text-gray-600">カテゴリー</label>
+                                    <select name="category" id="category">
                                         @foreach ($categories as $category)
                                             <optgroup label="{{ $category->name }}">
                                                 @foreach ($category->secondary as $secondary)
@@ -33,6 +91,17 @@
                             <x-select-image :images="$images" name="image3" />
                             <x-select-image :images="$images" name="image4" />
                             <x-select-image :images="$images" name="image5" />
+                            <div class="p-2 w-1/2 mx-auto">
+                                <div class="relative flex justify-around">
+                                    <div>
+                                        <input type="radio" name="is_selling" value="1" checked>販売中
+                                    </div>
+                                    <div>
+                                        <input type="radio" name="is_selling" value="0">停止中
+                                    </div>
+                                    <x-input-error :messages="$errors->get('is_selling')" class="mt-2" />
+                                </div>
+                            </div>
                             <div class="p-2 w-full mt-4 flex justify-around">
                                 <button type="button" onclick="location.href='{{ route('owner.products.index') }}'"
                                     class="bg-gray-200 border-0 py-2 px-8 focus:outline-none hover:bg-gray-400 rounded text-lg">戻る</button>
