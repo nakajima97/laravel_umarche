@@ -9,13 +9,14 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 bg-white border-b border-gray-200">
-                    <form action="{{ route('owner.products.update', ['product' => 'product->id']) }}" method="POST">
+                    <form action="{{ route('owner.products.update', ['product' => $product->id]) }}" method="POST">
                         @csrf
+                        @method('PUT')
                         <div class="-m-2">
                             <div class="p-2 w-1/2 mx-auto">
                                 <div class="relative">
                                     <label for="name" class="leading-7 text-sm text-gray-600">商品名 ※必須</label>
-                                    <input type="text" id="name" required value="{{ product->name }}"
+                                    <input type="text" id="name" required value="{{ $product->name }}"
                                         name="name"
                                         class="w-full bg-gray-100 bg-opacity-50 rounded border border-gray-300 focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out">
                                     <x-input-error :messages="$errors->get('name')" class="mt-2" />
@@ -49,17 +50,8 @@
                             </div>
                             <div class="p-2 w-1/2 mx-auto">
                                 <div class="relative">
-                                    <label for="quantity" class="leading-7 text-sm text-gray-600">初期在庫 ※必須</label>
-                                    <input type="number" id="quantity" value="{{ $product->quantity }}" required
-                                        name="quantity"
-                                        class="w-full bg-gray-100 bg-opacity-50 rounded border border-gray-300 focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out">
-                                    <x-input-error :messages="$errors->get('sort_order')" class="mt-2" />
-                                </div>
-                            </div>
-                            <div class="p-2 w-1/2 mx-auto">
-                                <div class="relative">
-                                    <label for="current_quantity" class="leading-7 text-sm text-gray-600">初期在庫
-                                        ※必須</label>
+                                    <label for="current_quantity" class="leading-7 text-sm text-gray-600">現在の在庫
+                                    </label>
                                     <input type="hidden" id="current_quantity" value="{{ $quantity }}" required
                                         name="current_quantity">
                                     <div class="w-full bg-gray-100 bg-opacity-50 rounded ">
@@ -70,11 +62,33 @@
                             </div>
                             <div class="p-2 w-1/2 mx-auto">
                                 <div class="relative">
+                                    <label for="quantity" class="leading-7 text-sm text-gray-600">数量 ※必須</label>
+                                    <input type="number" id="quantity" value="{{ $product->quantity }}" required
+                                        name="quantity"
+                                        class="w-full bg-gray-100 bg-opacity-50 rounded border border-gray-300 focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out">
+                                    <span class="font-sm">0〜99の範囲で入力してください</span>
+                                    <x-input-error :messages="$errors->get('sort_order')" class="mt-2" />
+                                </div>
+                            </div>
+                            <div class="p-2 w-1/2 mx-auto">
+                                <div class="relative flex justify-around">
+                                    <div>
+                                        <input type="radio" name="type" value="1" checked>追加
+                                    </div>
+                                    <div>
+                                        <input type="radio" name="type" value="2">削減
+                                    </div>
+                                    <x-input-error :messages="$errors->get('is_selling')" class="mt-2" />
+                                </div>
+                            </div>
+                            <div class="p-2 w-1/2 mx-auto">
+                                <div class="relative">
                                     <label for="shop_id" class="leading-7 text-sm text-gray-600">販売する店舗</label>
                                     <select name="shop_id" id="shop_id"
                                         class="w-full bg-gray-100 bg-opacity-50 rounded border border-gray-300 focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out">
                                         @foreach ($shops as $shop)
-                                            <option value="{{ $shop->id }}">
+                                            <option value="{{ $shop->id }}"
+                                                @if ($shop->id === $product->shop_id) selected @endif>
                                                 {{ $shop->name }}
                                             </option>
                                         @endforeach
@@ -88,7 +102,8 @@
                                         @foreach ($categories as $category)
                                             <optgroup label="{{ $category->name }}">
                                                 @foreach ($category->secondary as $secondary)
-                                                    <option value="{{ $secondary->id }}">
+                                                    <option value="{{ $secondary->id }}"
+                                                        @if ($secondary->id === $product->secondary_id) selected @endif>
                                                         {{ $secondary->name }}
                                                     </option>
                                                 @endforeach
@@ -98,18 +113,24 @@
                                     <x-input-error :messages="$errors->get('name')" class="mt-2" />
                                 </div>
                             </div>
-                            <x-select-image :images="$images" name="image1" />
-                            <x-select-image :images="$images" name="image2" />
-                            <x-select-image :images="$images" name="image3" />
-                            <x-select-image :images="$images" name="image4" />
+                            <x-select-image :images="$images" name="image1" currentId="{{ $product->image1 }}"
+                                currentImage="{{ $product->imageFirst->filename ?? '' }}" />
+                            <x-select-image :images="$images" name="image2" currentId="{{ $product->image2 }}"
+                                currentImage="{{ $product->imageSecond->filename ?? '' }}" />
+                            <x-select-image :images="$images" name="image3" currentId="{{ $product->image3 }}"
+                                currentImage="{{ $product->imageThird->filename ?? '' }}" />
+                            <x-select-image :images="$images" name="image4" currentId="{{ $product->image4 }}"
+                                currentImage="{{ $product->imageFourth->filename ?? '' }}" />
                             <x-select-image :images="$images" name="image5" />
                             <div class="p-2 w-1/2 mx-auto">
                                 <div class="relative flex justify-around">
                                     <div>
-                                        <input type="radio" name="is_selling" value="1" checked>販売中
+                                        <input type="radio" name="is_selling" value="1"
+                                            @if ($product->is_selling === 1) { checked } @endif>販売中
                                     </div>
                                     <div>
-                                        <input type="radio" name="is_selling" value="0">停止中
+                                        <input type="radio" name="is_selling" value="0"
+                                            @if ($product->is_selling === 2) { checked } @endif>停止中
                                     </div>
                                     <x-input-error :messages="$errors->get('is_selling')" class="mt-2" />
                                 </div>
