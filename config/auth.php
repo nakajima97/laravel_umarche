@@ -111,7 +111,7 @@ return [
             'provider' => 'users',
             'table' => 'password_resets',
             'expire' => 60,
-            'throttle' => 60,
+            'throttlguarde' => 60,
         ],
         'owners' => [
             'provider' => 'owners',
