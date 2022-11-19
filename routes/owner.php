@@ -24,10 +24,6 @@ use App\Http\Controllers\Owner\ProductController;
 |
 */
 
-Route::get('/', function () {
-  return view('owner.welcome');
-});
-
 Route::prefix('shops')->middleware('auth:owners')->group(function () {
   Route::get('index', [ShopController::class, 'index'])
     ->name('shops.index');
@@ -49,11 +45,6 @@ Route::get('/dashboard', function () {
 })->middleware(['auth:owners', 'verified'])->name('dashboard');
 
 Route::middleware('guest')->group(function () {
-  Route::get('register', [RegisteredUserController::class, 'create'])
-    ->name('register');
-
-  Route::post('register', [RegisteredUserController::class, 'store']);
-
   Route::get('login', [AuthenticatedSessionController::class, 'create'])
     ->name('login');
 
