@@ -14,9 +14,10 @@
                             <div class="w-1/4 p-2 md:p-4">
                                 <a href="">
                                     <div class="border bordered-md p-2 md:p-4">
-                                        <x-thumbnail filename="{{ $product->name ?? '' }}" type="products" />
+                                        <x-thumbnail filename="{{ $product->imageFirst->filename ?? '' }}"
+                                            type="products" />
                                         <div class="text-gray-700">
-                                            {{-- {{ $product->name }} --}}
+                                            {{ $product->name }}
                                         </div>
                                     </div>
                                 </a>
