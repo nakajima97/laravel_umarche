@@ -57,9 +57,9 @@ class CartController extends Controller
         $user = User::findOrFail(Auth::id());
         $products = $user->products;
 
-        $lineItems = [];
+        $line_items = [];
         foreach ($products as $product) {
-            $lineItem = [
+            $line_item = [
                 'name' => $product->name,
                 'description' => $product->description,
                 'amount' => $product->price,
@@ -67,7 +67,19 @@ class CartController extends Controller
                 'quantity' => $product->pivot->quantity,
             ];
 
-            array_push($lineItems, $lineItem);
+            array_push($line_items, $line_item);
         }
+
+        \Stripe\Stripe::setApiKey(env('STRIPE_SECRET_KEY'));
+        $session = \Stripe\Checkout\Session::create([
+            'payment_method_types' => ['card'],
+            'line_items' => [$line_items],
+            'mode' => 'payment',
+            'success_url' => route('user.items.index'),
+            'cancel_url' => route('cart.cart.index'),
+        ]);
+
+        $publicKey = env('STRIPE_PUBLIC_KEY');
+        return view('user.checkout', compact('session', 'publicKey'));
     }
 }
