@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Cart;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
+use App\Models\Stock;
 
 class CartController extends Controller
 {
@@ -59,15 +60,31 @@ class CartController extends Controller
 
         $line_items = [];
         foreach ($products as $product) {
-            $line_item = [
-                'name' => $product->name,
-                'description' => $product->description,
-                'amount' => $product->price,
-                'currency' => 'jpy',
-                'quantity' => $product->pivot->quantity,
-            ];
+            $quantity = "";
+            $quantity = Stock::where('product_id', $product->id)
+                ->sum('quantity');
+
+            if ($product->pivot->quantity > $quantity) {
+                return redirect()->route('user.cart.index');
+            } else {
+                $line_item = [
+                    'name' => $product->name,
+                    'description' => $product->description,
+                    'amount' => $product->price,
+                    'currency' => 'jpy',
+                    'quantity' => $product->pivot->quantity,
+                ];
+            }
 
             array_push($line_items, $line_item);
+        }
+
+        foreach ($products as $product) {
+            Stock::create([
+                'product_id' => $product->id,
+                'type' => \Constant::PRODUCT_LIST['reduce'],
+                'quantity' => $product->pivot->quantity * -1
+            ]);
         }
 
         \Stripe\Stripe::setApiKey(env('STRIPE_SECRET_KEY'));
