@@ -32,6 +32,8 @@ Route::prefix('cart')->middleware('auth:users')->group(function () {
         ->name('cart.add');
     Route::get('/', [CartController::class, 'index'])
         ->name('cart.index');
+    Route::post('delete/{item}', [CartController::class, 'delete'])
+        ->name('cart.delete');
 });
 
 Route::get('/component-test1', [ComponentTestController::class, 'showComponent1']);
