@@ -7,6 +7,8 @@ import "swiper/css/pagination";
 
 // init Swiper:
 const swiper = new Swiper(".swiper", {
+    modules: [Navigation, Pagination],
+
     // Optional parameters
     // direction: "vertical",
     loop: true,
