@@ -81,3 +81,9 @@
         }
     </script>
 </x-app-layout>
+<script>
+    const select = document.getElementById('sort');
+    select.addEventListener('change', function() {
+        this.form.submit();
+    });
+</script>
