@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
+use App\Jobs\SendThanksMail;
 use App\Mail\TestMail;
 use App\Models\PrimaryCategory;
 use App\Models\Product;
@@ -39,7 +40,7 @@ class ItemController extends Controller
 
         $categories = PrimaryCategory::with('secondary')->get();
 
-        Mail::to('test@example.com')->send(new TestMail());
+        SendThanksMail::dispatch();
 
         return view('user.index', compact('products', 'categories'));
     }
