@@ -3,11 +3,14 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
+use App\Jobs\SendOrderedMail;
 use Illuminate\Http\Request;
 use App\Models\Cart;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use App\Models\Stock;
+use App\Services\CartService;
+use App\Jobs\SendThanksMail;
 
 class CartController extends Controller
 {
@@ -56,7 +59,14 @@ class CartController extends Controller
     public function checkout()
     {
         $user = User::findOrFail(Auth::id());
-        $products = $user->products;
+        $itemsInCart = Cart::where('user_id', $user->id)->get();
+        $products = CartService::getItemsInCart($itemsInCart);
+
+        SendThanksMail::dispatch($products, $user);
+
+        foreach ($products as $product) {
+            SendOrderedMail::dispatch($product, $user);
+        }
 
         $line_items = [];
         foreach ($products as $product) {
