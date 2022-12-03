@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
+use App\Jobs\SendOrderedMail;
 use Illuminate\Http\Request;
 use App\Models\Cart;
 use Illuminate\Support\Facades\Auth;
@@ -62,6 +63,10 @@ class CartController extends Controller
         $products = CartService::getItemsInCart($itemsInCart);
 
         SendThanksMail::dispatch($products, $user);
+
+        foreach ($products as $product) {
+            SendOrderedMail::dispatch($product, $user);
+        }
 
         $line_items = [];
         foreach ($products as $product) {
